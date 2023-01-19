@@ -7,11 +7,11 @@ const { Router } = express;
 const router = Router();
 const port = 3100;
 var compression = require('compression');
-var mysql = require('mysql');
+var mysql = require('mysql2');
 var con = mysql.createConnection({
     host: 'localhost',
-    user: 'root',
-    password: 'root',
+    user: 'STT_test_user',
+    password: 'STT_pass',
     database: 'stt_db'
 });
 
