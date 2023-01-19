@@ -6,7 +6,7 @@ const httpServer = new HttpServer(app);
 const { Router } = express;
 const fs = require('fs');
 const router = Router();
-const port = 5000;
+const port = 3100;
 var compression = require('compression');
 let statsFile = undefined;
 
