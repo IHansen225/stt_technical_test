@@ -4,11 +4,16 @@ const app = express()
 const { Server: HttpServer } = require('http');
 const httpServer = new HttpServer(app);
 const { Router } = express;
-const fs = require('fs');
 const router = Router();
-const port = 5000;
+const port = 3100;
 var compression = require('compression');
-let statsFile = undefined;
+var mysql = require('mysql');
+var con = mysql.createConnection({
+    host: 'localhost',
+    user: 'STT_test_user',
+    password: 'STT_pass',
+    database: 'stt_db'
+});
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -16,25 +21,12 @@ app.use('/api/', router);
 app.use(cors());
 app.use(compression());
 
-// Funcion de inicializacion de localStorage
+// Funcion de inicializacion de dbStorage
 function init() {
-    try {
-        fs.readFileSync(`${__dirname}/public/analyses.json`, { encoding: 'utf8', flag: 'r' });
-        JSON.parse(fs.readFileSync(`${__dirname}/public/analyses.json`, { encoding: 'utf8' }));
-        console.log("Analyses loaded successfully");
-    } catch (err) {
-        console.log("Error reading analyses from fileStorage, creating new file...")
-        fs.writeFileSync(`${__dirname}/public/analyses.json`, `{
-        "stats": {
-                "count_anomalies": 0,
-                "count_no_anomalies": 0,
-                "ratio": 0
-            },
-            "hist": {}
-        }`);
-    }
-    statsFile = JSON.parse(fs.readFileSync(`${__dirname}/public/analyses.json`, { encoding: 'utf8' }))
-}
+    con.connect(function(err) {
+        if (err) throw err;
+    });
+};
 
 // Funcion que recibe los datos brindados por la request para detectar patrones establecidos
 function checkAnomalies(data) {
