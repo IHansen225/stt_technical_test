@@ -26,6 +26,10 @@ function init() {
     con.connect(function(err) {
         if (err) throw err;
     });
+    con.query("SELECT * FROM dna_stats"), function (err, result) {
+        if (err) throw err;
+        console.log(result);
+    }
 };
 
 // Funcion que recibe los datos brindados por la request para detectar patrones establecidos
