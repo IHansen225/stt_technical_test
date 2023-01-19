@@ -24,12 +24,12 @@ app.use(compression());
 // Funcion de inicializacion de dbStorage
 function init() {
     con.connect(function(err) {
-        if (err) throw err;
+        if (err) {
+            throw err;
+        } else {
+            console.log('Database connection OK');
+        }
     });
-    con.query("SELECT * FROM dna_stats"), function (err, result) {
-        if (err) throw err;
-        console.log(result);
-    }
 };
 
 // Funcion que recibe los datos brindados por la request para detectar patrones establecidos
