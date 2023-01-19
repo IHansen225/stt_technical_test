@@ -10,8 +10,8 @@ var compression = require('compression');
 var mysql = require('mysql');
 var con = mysql.createConnection({
     host: 'localhost',
-    user: 'STT_test_user',
-    password: 'STT_pass',
+    user: 'root',
+    password: 'root',
     database: 'stt_db'
 });
 
