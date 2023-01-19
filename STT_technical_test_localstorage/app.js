@@ -10,6 +10,7 @@ const port = 5000;
 var compression = require('compression');
 let statsFile = undefined;
 
+// Inicializacion de parametros de uso de express()
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use('/api/', router);
@@ -19,10 +20,12 @@ app.use(compression());
 // Funcion de inicializacion de localStorage
 function init() {
     try {
+        // Lectura del archivo de persistencia local existente
         fs.readFileSync(`${__dirname}/public/analyses.json`, { encoding: 'utf8', flag: 'r' });
         JSON.parse(fs.readFileSync(`${__dirname}/public/analyses.json`, { encoding: 'utf8' }));
         console.log("Analyses loaded successfully");
     } catch (err) {
+        // Manejo de errores, creacion del archivo y correcion de datos
         console.log("Error reading analyses from fileStorage, creating new file...")
         fs.writeFileSync(`${__dirname}/public/analyses.json`, `{
         "stats": {
@@ -52,7 +55,7 @@ function checkAnomalies(data) {
     }
 
     // Evita ejecucion si los datos de entrada son invalidos
-    if (!("dna" in data)) {
+    if (!("dna" in data) || Object.keys(data).length != 1 || data["dna"].length < 3) {
         return undefined;
     }
     
@@ -61,11 +64,11 @@ function checkAnomalies(data) {
     for (let i = 0; i < mat.length; i++) {
         for (let j = 0; j < mat[i].length; j++) {
             if ((j + 3 < mat[i].length) && (mat[i][j] === mat[i][j + 1]) && (mat[i][j] === mat[i][j + 2])) {
-                return save(data, true);
+                return save(data, true); // Deteccion del patron horizontal en la matriz
             } else if ((i + 3 < mat.length) && (mat[i][j] === mat[i + 1][j]) && (mat[i][j] === mat[i + 2][j])) {
-                return save(data, true);
+                return save(data, true); // Deteccion del patron vertical en la matriz
             } else if ((i + 3 < mat.length) && (j + 3 < mat[i].length) && (mat[i][j] === mat[i + 1][j + 1] && mat[i][j] === mat[i + 2][j + 2])) {
-                return save(data, true);
+                return save(data, true); // Deteccion del patron diagonal en la matriz
             }
         }
     }
@@ -89,7 +92,7 @@ router.get('/stats', function (req, res) {
 router.post('/validate-anomaly', function (req, res) {
     var result = checkAnomalies(req.body)
     if (result === undefined) {
-        res.status(400).send("Error 400: Bad request, possibly invalid JSON or required key not in request body.");
+        res.status(400).send("Bad request.");
     } else if (result === false) {
         res.status(403).send("No anomalies detected.");
     } else if (result === true) {
