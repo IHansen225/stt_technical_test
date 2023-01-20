@@ -20,7 +20,7 @@ El proyecto consiste en una API basada en Node.js, la cual recibe datos en forma
 Analisis de datos de entrada:
 
 	Best: O(n)
-	Average: O(n.log(n))
+	Average: O(n.K)
 	Worst: O(n^2)
 
 Solicitud de estadisticas:
