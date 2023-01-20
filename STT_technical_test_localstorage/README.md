@@ -5,7 +5,6 @@
 
 ### Herramientas utilizadas:
 - [Node.js](https://nodejs.org/en/) v12.22.9
-- [MySQL](https://www.mysql.com/) 8.0.31-0ubuntu0.22.04.1 for Linux
 - [AWS](https://aws.amazon.com/)
 - [PM2](https://pm2.keymetrics.io/) 5.2.2
 
@@ -13,8 +12,8 @@
 El proyecto consiste en una API simple basada en Node.js, la cual recibe datos en formato JSON, para su posterior análisis, devolviendo resultados en forma de códigos HTTP. La misma cuenta con persistencia de datos y estadísticas de uso accesibles al usuario mediante su correspondiente endpoint.
 
 ### Links de acceso:
-[Version con persistencia de datos MYSQL](ec2-3-87-206-7.compute-1.amazonaws.com:3100/api/)
-[Version con persistencia de datos local](ec2-3-87-206-7.compute-1.amazonaws.com:3300/api/)
+- [Version con persistencia de datos MYSQL](http://ec2-3-87-206-7.compute-1.amazonaws.com:3100/api/)
+- [Version con persistencia de datos local](http://ec2-3-87-206-7.compute-1.amazonaws.com:3300/api/)
 
 ### Complejidad algoritmica:
 Analisis de datos de entrada:
