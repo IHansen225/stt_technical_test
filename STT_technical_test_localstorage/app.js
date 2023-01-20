@@ -6,7 +6,7 @@ const httpServer = new HttpServer(app);
 const { Router } = express;
 const fs = require('fs');
 const router = Router();
-const port = 3100;
+const port = 3300;
 var compression = require('compression');
 let statsFile = undefined;
 
@@ -49,13 +49,14 @@ function checkAnomalies(data) {
         } else {
             statsFile.stats["count_no_anomalies"]++;
         }
+        statsFile.stats["ratio"] = statsFile.stats["count_anomalies"] / statsFile.stats["count_no_anomalies"]
         statsFile.hist[new Date().toISOString()] = data;
         fs.writeFileSync(`${__dirname}/public/analyses.json`, JSON.stringify(statsFile));
         return anom;
     }
 
     // Evita ejecucion si los datos de entrada son invalidos
-    if (!("dna" in data) || Object.keys(data).length != 1 || data["dna"].length < 3) {
+    if (!("dna" in data) || Object.keys(data).length != 1 || data["dna"].length < 3 || data["dna"].length > 2000 || data["dna"].some(val => val.length < 3)) {
         return undefined;
     }
     
@@ -63,11 +64,13 @@ function checkAnomalies(data) {
     var mat = data["dna"]
     for (let i = 0; i < mat.length; i++) {
         for (let j = 0; j < mat[i].length; j++) {
-            if ((j + 3 < mat[i].length) && (mat[i][j] === mat[i][j + 1]) && (mat[i][j] === mat[i][j + 2])) {
+            if ((j + 3 <= mat[i].length) && (mat[i][j] === mat[i][j + 1]) && (mat[i][j] === mat[i][j + 2])) {
                 return save(data, true); // Deteccion del patron horizontal en la matriz
-            } else if ((i + 3 < mat.length) && (mat[i][j] === mat[i + 1][j]) && (mat[i][j] === mat[i + 2][j])) {
+            } else if ((i + 3 <= mat.length) && (mat[i][j] === mat[i + 1][j]) && (mat[i][j] === mat[i + 2][j])) {
                 return save(data, true); // Deteccion del patron vertical en la matriz
-            } else if ((i + 3 < mat.length) && (j + 3 < mat[i].length) && (mat[i][j] === mat[i + 1][j + 1] && mat[i][j] === mat[i + 2][j + 2])) {
+            } else if ((i + 3 <= mat.length) && (j + 3 <= mat[i].length) && (mat[i][j] === mat[i + 1][j + 1] && mat[i][j] === mat[i + 2][j + 2])) {
+                return save(data, true); // Deteccion del patron diagonal en la matriz
+            } else if ((i + 3 <= mat.length) && (j - 2 >= 0) && (mat[i][j] === mat[i + 1][j - 1] && mat[i][j] === mat[i + 2][j - 2])) {
                 return save(data, true); // Deteccion del patron diagonal en la matriz
             }
         }
