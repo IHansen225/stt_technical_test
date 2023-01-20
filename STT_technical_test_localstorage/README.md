@@ -63,5 +63,6 @@ En este caso, la API no necesita de autenticación para su uso.
 - **POST: /validate-anomaly -> 200:** El JSON enviado para análisis contiene una anomalía.
 - **POST: /validate-anomaly -> 400:** El JSON enviado no es válido o no cumple con las condiciones de entrada.
 - **POST: /validate-anomaly -> 403:** El JSON enviado no contiene anomalías.
+
 *Cualquier otro endpoint no mapeado previamente en este documento genera un código 404.*
 
