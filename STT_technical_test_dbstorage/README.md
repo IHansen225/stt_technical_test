@@ -51,7 +51,7 @@ Condiciones de datos de entrada:
 
 -   Formato: JSON
 -   Contenido:
---   Keys: “dna”
+--  Keys: “dna”
 --  Values: array con n elementos, siendo cada elemento un array de n valores, conformando una matriz cuadrada
 *En caso de no cumplirse dichas condiciones, el endpoint rechaza el dato de entrada, devolviendo un código de error.*
 
