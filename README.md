@@ -14,7 +14,7 @@
 - [PM2](https://pm2.keymetrics.io/) 5.2.2
 
 ### Introducción:
-El proyecto consiste en una API simple basada en Node.js, la cual recibe datos en formato JSON, para su posterior análisis, devolviendo resultados en forma de códigos HTTP. La misma cuenta con persistencia de datos y estadísticas de uso accesibles al usuario mediante su correspondiente endpoint.
+El proyecto consiste en una API basada en Node.js, la cual recibe datos en formato JSON, para su posterior análisis, devolviendo resultados en forma de códigos HTTP. La misma cuenta con persistencia de datos y estadísticas de uso accesibles al usuario mediante su correspondiente endpoint.
 
 ### Índice:
 

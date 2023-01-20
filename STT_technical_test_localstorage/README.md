@@ -9,7 +9,7 @@
 - [PM2](https://pm2.keymetrics.io/) 5.2.2
 
 ### Introducción:
-El proyecto consiste en una API simple basada en Node.js, la cual recibe datos en formato JSON, para su posterior análisis, devolviendo resultados en forma de códigos HTTP. La misma cuenta con persistencia de datos y estadísticas de uso accesibles al usuario mediante su correspondiente endpoint.
+El proyecto consiste en una API basada en Node.js, la cual recibe datos en formato JSON, para su posterior análisis, devolviendo resultados en forma de códigos HTTP. La misma cuenta con persistencia de datos y estadísticas de uso accesibles al usuario mediante su correspondiente endpoint.
 
 ### Links de acceso:
 - [Version con persistencia de datos MYSQL](http://ec2-3-87-206-7.compute-1.amazonaws.com:3100/api/)
@@ -50,8 +50,8 @@ Condiciones de datos de entrada:
 
 -   Formato: JSON
 -   Contenido:
---   Keys: “dna”
---  Values: array con n elementos, siendo cada elemento un array de n valores, conformando una matriz cuadrada
+- -  Keys: “dna”
+- -  Values: array con n elementos, siendo cada elemento un array de n valores, conformando una matriz cuadrada
 *En caso de no cumplirse dichas condiciones, el endpoint rechaza el dato de entrada, devolviendo un código de error.*
 
 Luego de recibido el dato, es analizado en busca del patrón establecido como anomalía (3 o más elementos en línea), devuelve un código HTTP de acuerdo al resultado del análisis.

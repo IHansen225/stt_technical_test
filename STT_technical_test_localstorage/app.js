@@ -56,7 +56,7 @@ function checkAnomalies(data) {
     }
 
     // Evita ejecucion si los datos de entrada son invalidos
-    if (!("dna" in data) || Object.keys(data).length != 1 || data["dna"].length < 3 || data["dna"].length > 2000 || data["dna"].some(val => val.length < data["dna"].length)) {
+    if (typeof(data) != 'object' || !("dna" in data) || Object.keys(data).length != 1 || data["dna"].length < 3 || data["dna"].length > 2000 || data["dna"].some(val => val.length < data["dna"].length)) {
         return undefined;
     }
     
