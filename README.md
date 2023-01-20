@@ -3,6 +3,10 @@
 
 ### Este repositorio contiene los archivos necesarios para la ejecución, prueba y análisis del ejercicio solicitado por la empresa STT.
 
+### Links de acceso:
+[Version con persistencia de datos MYSQL](ec2-3-87-206-7.compute-1.amazonaws.com:3100/api/)
+[Version con persistencia de datos local](ec2-3-87-206-7.compute-1.amazonaws.com:3300/api/)
+
 ### Herramientas utilizadas:
 - [Node.js](https://nodejs.org/en/) v12.22.9
 - [MySQL](https://www.mysql.com/) 8.0.31-0ubuntu0.22.04.1 for Linux
