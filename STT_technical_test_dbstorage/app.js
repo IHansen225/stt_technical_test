@@ -8,6 +8,7 @@ const router = Router();
 const port = 3100;
 var compression = require('compression');
 var mysql = require('mysql2');
+// Parametros de conexion a la base de datos
 var con = mysql.createConnection({
     host: 'localhost',
     user: 'STT_test_user',
@@ -37,18 +38,12 @@ function checkAnomalies(data) {
 
     // Guarda los datos en funcion del resultado de la busqueda de anonalias
     function save(data, anom) {
-        if (anom) {
-            statsFile.stats["count_anomalies"]++;
-        } else {
-            statsFile.stats["count_no_anomalies"]++;
-        }
-        statsFile.hist[new Date().toISOString()] = data;
-        fs.writeFileSync(`${__dirname}/public/analyses.json`, JSON.stringify(statsFile));
+        con.query(`INSERT INTO dna_analyses (timestamp, obj, anomaly) VALUES ('${new Date().toISOString()}', '${JSON.stringify(data["dna"])}', ${anom === true ? 1 : 0})`)
         return anom;
     }
 
     // Evita ejecucion si los datos de entrada son invalidos
-    if (!("dna" in data)) {
+    if (!("dna" in data) || Object.keys(data).length != 1 || data["dna"].length < 3 || data["dna"].length > 2000 || data["dna"].some(val => val.length < 3)) {
         return undefined;
     }
     
@@ -56,12 +51,14 @@ function checkAnomalies(data) {
     var mat = data["dna"]
     for (let i = 0; i < mat.length; i++) {
         for (let j = 0; j < mat[i].length; j++) {
-            if ((j + 3 < mat[i].length) && (mat[i][j] === mat[i][j + 1]) && (mat[i][j] === mat[i][j + 2])) {
-                return save(data, true);
-            } else if ((i + 3 < mat.length) && (mat[i][j] === mat[i + 1][j]) && (mat[i][j] === mat[i + 2][j])) {
-                return save(data, true);
-            } else if ((i + 3 < mat.length) && (j + 3 < mat[i].length) && (mat[i][j] === mat[i + 1][j + 1] && mat[i][j] === mat[i + 2][j + 2])) {
-                return save(data, true);
+            if ((j + 3 <= mat[i].length) && (mat[i][j] === mat[i][j + 1]) && (mat[i][j] === mat[i][j + 2])) {
+                return save(data, true); // Deteccion del patron horizontal en la matriz
+            } else if ((i + 3 <= mat.length) && (mat[i][j] === mat[i + 1][j]) && (mat[i][j] === mat[i + 2][j])) {
+                return save(data, true); // Deteccion del patron vertical en la matriz
+            } else if ((i + 3 <= mat.length) && (j + 3 < mat[i].length) && (mat[i][j] === mat[i + 1][j + 1] && mat[i][j] === mat[i + 2][j + 2])) {
+                return save(data, true); // Deteccion del patron diagonal en la matriz
+            } else if ((i + 3 <= mat.length) && (j - 2 >= 0) && (mat[i][j] === mat[i + 1][j - 1] && mat[i][j] === mat[i + 2][j - 2])) {
+                return save(data, true); // Deteccion del patron diagonal inverso en la matriz
             }
         }
     }
@@ -78,14 +75,16 @@ httpServer.listen(port, () => {
 
 // GET method - Devuelve las estadisticas de uso de la API
 router.get('/stats', function (req, res) {
-    res.send(statsFile);
+    con.query(`SELECT SUM(anomaly) AS count_anomalies, (COUNT(anomaly) - SUM(anomaly)) AS count_no_anomalies, (SUM(anomaly) / COUNT(anomaly)) as ratio FROM dna_analyses`, async function(err, result) {
+        res.send(result[0]);
+    });
 });
 
 // POST method - Recibe un JSON y devuelve un status code dependiendo del resultado de checkAnomalies()
 router.post('/validate-anomaly', function (req, res) {
     var result = checkAnomalies(req.body)
     if (result === undefined) {
-        res.status(400).send("Error 400: Bad request, possibly invalid JSON or required key not in request body.");
+        res.status(400).send("Bad request.");
     } else if (result === false) {
         res.status(403).send("No anomalies detected.");
     } else if (result === true) {
