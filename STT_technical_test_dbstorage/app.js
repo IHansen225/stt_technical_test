@@ -1,13 +1,15 @@
 const express = require('express')
 const cors = require('cors')
+var mysql = require('mysql2');
 const app = express()
+var compression = require('compression');
+
 const { Server: HttpServer } = require('http');
 const httpServer = new HttpServer(app);
 const { Router } = express;
 const router = Router();
 const port = 3100;
-var compression = require('compression');
-var mysql = require('mysql2');
+
 // Parametros de conexion a la base de datos
 var con = mysql.createConnection({
     host: 'localhost',

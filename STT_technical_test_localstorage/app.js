@@ -1,13 +1,15 @@
 const express = require('express')
 const cors = require('cors')
-const app = express()
+const fs = require('fs');
+var compression = require('compression');
 const { Server: HttpServer } = require('http');
+
+const app = express()
 const httpServer = new HttpServer(app);
 const { Router } = express;
-const fs = require('fs');
 const router = Router();
+
 const port = 3300;
-var compression = require('compression');
 let statsFile = undefined;
 
 // Inicializacion de parametros de uso de express()
